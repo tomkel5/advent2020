@@ -25,6 +25,11 @@ public class Board {
         currentColumn = 0;
     }
 
+    public void reset() {
+        currentRow = 0;
+        currentColumn = 0;
+    }
+
     /**
      * Move the marker left/right and up/down. If it would go above or below the map, return false.
      */
