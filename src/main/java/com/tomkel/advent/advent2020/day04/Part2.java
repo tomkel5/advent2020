@@ -5,10 +5,10 @@ import com.tomkel.advent.advent2020.FileHelpers;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Part1 {
+public class Part2 {
 
     /**
-     * @see <a href="https://adventofcode.com/2020/day/4">Puzzle 4.1</a>
+     * @see <a href="https://adventofcode.com/2020/day/4#part2">Puzzle 4.2</a>
      */
     public static void main(String[] args) throws Exception {
 
@@ -21,7 +21,7 @@ public class Part1 {
 
         long numValidPassports = Stream.of(passportParts)
                 .map(Passport::new)
-                .filter(Passport::isQuickValid)
+                .filter(Passport::isExtendedValid)
                 .count();
 
         System.out.printf("There are %s valid passports.%n", numValidPassports);
