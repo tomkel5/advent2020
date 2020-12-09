@@ -1,5 +1,7 @@
 package com.tomkel.advent.advent2020.day01;
 
+import com.tomkel.advent.advent2020.FileHelpers;
+
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -9,13 +11,10 @@ public class Part1 {
 
     /**
      * @see <a href="https://adventofcode.com/2020/day/1">Puzzle 1.1</a>
-     *
-     * @param args
-     * @throws Exception
      */
     public static void main(String[] args) throws Exception {
 
-        List<Integer> numbers = new Day01InputFileReader().getIntegers();
+        List<Integer> numbers = FileHelpers.getIntegers("day01/input.txt");
 
         // Combine the numbers with their difference from 2020.
         // When we see a duplicate value in the combined list, we'll have our answer.

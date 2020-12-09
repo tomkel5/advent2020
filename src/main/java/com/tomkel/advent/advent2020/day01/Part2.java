@@ -1,16 +1,15 @@
 package com.tomkel.advent.advent2020.day01;
 
+import com.tomkel.advent.advent2020.FileHelpers;
+
 public class Part2 {
 
     /**
      * @see <a href="https://adventofcode.com/2020/day/1#part2">Puzzle 1.2</a>
-     *
-     * @param args
-     * @throws Exception
      */
     public static void main(String[] args) throws Exception {
 
-        int[] numbers = new Day01InputFileReader().getIntegers()
+        int[] numbers = FileHelpers.getIntegers("day01/input.txt")
                 .stream().mapToInt(Integer::valueOf).sorted().toArray();
 
         for (int i = 0; i < numbers.length; i ++) {
