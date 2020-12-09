@@ -14,6 +14,6 @@ public class Part1 {
                 .filter(Line::isValidSledRental)
                 .count();
 
-        System.out.printf("There are %s valid passwords.", validLines);
+        System.out.printf("There are %s valid passwords.%n", validLines);
     }
 }

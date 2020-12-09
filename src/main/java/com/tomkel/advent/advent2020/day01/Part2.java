@@ -17,7 +17,7 @@ public class Part2 {
                 for (int k = j + 1; k < numbers.length; k ++) {
                     if (numbers[i] + numbers[j] + numbers[k] == 2020) {
                         System.out.printf(
-                                "%s * %s * %s = %s",
+                                "%s * %s * %s = %s%n",
                                 numbers[i],
                                 numbers[j],
                                 numbers[k],
