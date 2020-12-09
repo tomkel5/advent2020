@@ -1,8 +1,5 @@
 package com.tomkel.advent.advent2020.day01;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.net.URL;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -18,7 +15,7 @@ public class Part1 {
      */
     public static void main(String[] args) throws Exception {
 
-        List<Integer> numbers = getIntegers();
+        List<Integer> numbers = new Day01InputFileReader().getIntegers();
 
         // Combine the numbers with their difference from 2020.
         // When we see a duplicate value in the combined list, we'll have our answer.
@@ -44,21 +41,5 @@ public class Part1 {
         }
 
         System.out.println("Whoops, that number doesn't exist");
-    }
-
-    private static List<Integer> getIntegers() throws FileNotFoundException {
-        ClassLoader classLoader = Part1.class.getClassLoader();
-        URL resource = classLoader.getResource("day01/input.txt");
-        if (resource == null) {
-            throw new AssertionError();
-        }
-
-        String path = resource.getPath();
-        Scanner scanner = new Scanner(new File(path));
-        List<Integer> numbers = new ArrayList<>();
-        while (scanner.hasNextInt()) {
-            numbers.add(scanner.nextInt());
-        }
-        return numbers;
     }
 }
