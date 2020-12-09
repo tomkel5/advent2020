@@ -38,4 +38,11 @@ public class FileHelpers {
         return lines;
     }
 
+    /**
+     * Get the contents of a file as one giant string.
+     */
+    public static String getContent(String fileName) throws FileNotFoundException {
+        return getLines(fileName).stream().collect(Collectors.joining("\n"));
+    }
+
 }
