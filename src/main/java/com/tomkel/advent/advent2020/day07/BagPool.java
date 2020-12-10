@@ -6,16 +6,10 @@ import java.util.Map;
 
 public class BagPool {
 
-    Map<String, BagType> bagTypes;
-    Map<BagType, Bag> bags;
-
-    public BagPool() {
-        this.bagTypes = new HashMap<>();
-        this.bags = new HashMap<>();
-    }
+    Map<String, Bag> bags;
 
     public BagPool(List<String> lines) {
-        this();
+        this.bags = new HashMap<>();
         for (String line : lines) {
             // Example: "faded magenta bags contain 3 wavy yellow bags, 4 clear orange bags."
             //           ^-----------------^       ^---------------------------------------^
@@ -25,7 +19,7 @@ public class BagPool {
             //                                    ^-------------^
             // This means that we need only create the bag type; no connections necessary.
             if (parts[1].contains("no other bags")) {
-                this.getBagType(parts[0]); // Ignore the result
+                this.getBag(parts[0]); // Ignore the result
                 continue;
             }
 
@@ -41,53 +35,54 @@ public class BagPool {
     }
 
     /**
-     * Find an existing bag type in the pool, or create a new one.
-     * @param bagDescriptor Descriptor examples: "8 light blue bags", "medium blue bags", or simply "dark blue"
+     * Find a bag in the pool, or create a new one if no existing bag matches the descriptor.
      */
-    public BagType getBagType(String bagDescriptor) {
+    public Bag getBag(String descriptor) {
 
-        String name = getBagDescriptorName(bagDescriptor);
+        String name = getBagDescriptorName(descriptor);
 
-        // Return the bag type if it already exists in the pool.
-        if (bagTypes.containsKey(name)) {
-            return bagTypes.get(name);
-        }
-
-        // If it doesn't exist in the pool, create a new one and return it.
-        bagTypes.put(name, new BagType());
-        return bagTypes.get(name);
-    }
-
-    public Bag getBag(BagType bagType) {
-        if (bags.containsKey(bagType)) {
-            return bags.get(bagType);
+        if (bags.containsKey(name)) {
+            return bags.get(name);
         }
 
         Bag bag = new Bag();
-        bags.put(bagType, bag);
+        bags.put(name, bag);
         return bag;
     }
 
+    /**
+     * Connect a bag with another bag inside it, based on two bag descriptors.
+     * The enclosed bag will become aware of the surrounding bag; the surrounding bag will have a number
+     * of enclosed bags added, the quantity of which is determined by the descriptor. (Note that there is
+     * only one instance of each bag type, so this instance is added multiple times to the list)
+     */
     public void connect(String surroundingBagDescriptor, String enclosedBagDescriptor) {
-        // Find or create both bag types
-        BagType surrounding = getBagType(surroundingBagDescriptor);
-        BagType enclosed = getBagType(enclosedBagDescriptor);
+        // Find or create both bag types.
+        Bag surroundingBag = getBag(surroundingBagDescriptor);
+        Bag enclosedBag = getBag(enclosedBagDescriptor);
 
-        // And then connect them
-        enclosed.getSurroundingBagTypes().add(surrounding);
-
-        // Find or create a bag
-        Bag bag = getBag(surrounding);
+        // Add the bags inside this bag.
         int quantity = getBagDescriptorQuantity(enclosedBagDescriptor);
         for (int i = 0; i < quantity; i ++) {
-            bag.getEnclosedBags().add(getBag(enclosed));
+            surroundingBag.getEnclosedBags().add(enclosedBag);
         }
+
+        // Make the bag aware of the bag surrounding it.
+        enclosedBag.getSurroundingBags().add(surroundingBag);
     }
 
+    /**
+     * Extract the quantity portion of a bag descriptor.
+     * Example: "3 plaid green bags" has a quantity of 3
+     */
     private int getBagDescriptorQuantity(String bagDescriptor) {
         return Integer.parseInt(bagDescriptor.trim().split(" ")[0]);
     }
 
+    /**
+     * Extract the name portion of a bag descriptor.
+     * Example: "3 plaid green bags" has a name of "plaid green"
+     */
     private String getBagDescriptorName(String bagDescriptor) {
         String[] parts = bagDescriptor.trim().split(" ");
 
@@ -96,5 +91,4 @@ public class BagPool {
         int nameStartIndex = (parts.length <= 3) ? 0 : 1;
         return String.format("%s %s", parts[nameStartIndex], parts[nameStartIndex +1]);
     }
-
 }

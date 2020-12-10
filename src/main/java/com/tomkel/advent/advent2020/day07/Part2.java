@@ -15,7 +15,7 @@ public class Part2 {
 
         BagPool pool = new BagPool(lines);
 
-        int count = pool.getBag(pool.getBagType("shiny gold")).getAllEnclosedBagCount();
+        int count = pool.getBag("shiny gold").getAllEnclosedBagCount();
 
         System.out.printf("A shiny gold bag holds %s other bags.%n", count);
     }

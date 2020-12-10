@@ -17,9 +17,9 @@ public class Part1 {
 
         BagPool pool = new BagPool(lines);
 
-        BagType bag = pool.getBagType("shiny gold");
-        Set<BagType> bagTypes = bag.getAllSurroundingBagTypes(new HashSet<>());
+        Set<Bag> bags = pool.getBag("shiny gold")
+                .getAllSurroundingBags(new HashSet<>());
 
-        System.out.printf("A shiny gold bag can be held by %s other bags.%n", bagTypes.size());
+        System.out.printf("A shiny gold bag can be held by %s other bags.%n", bags.size());
     }
 }
