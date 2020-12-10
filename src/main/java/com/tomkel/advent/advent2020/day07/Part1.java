@@ -15,30 +15,7 @@ public class Part1 {
 
         List<String> lines = FileHelpers.getLines("day07/input.txt");
 
-        BagTypePool pool = new BagTypePool();
-
-        for (String line : lines) {
-            // Example: "faded magenta bags contain 3 wavy yellow bags, 4 clear orange bags."
-            //           ^-----------------^       ^---------------------------------------^
-            String[] parts = line.split("contain");
-
-            // Example: "vibrant blue bags contain no other bags."
-            //                                    ^-------------^
-            // This means that we need only create the bag type; no connections necessary.
-            if (parts[1].contains("no other bags")) {
-                pool.getBagType(parts[0]); // Ignore the result
-                continue;
-            }
-
-            // Example: "plaid bronze bags contain 3 vibrant orange bags, 3 dark aqua bags."
-            //                                    ^---------------------^-----------------^
-            // Bag descriptors here are separated by commas. (ignore whitespace, since we trim the descriptor later)
-            String[] enclosedParts = parts[1].split(",");
-
-            for (String enclosedPart : enclosedParts) {
-                pool.connect(parts[0], enclosedPart);
-            }
-        }
+        BagPool pool = new BagPool(lines);
 
         BagType bag = pool.getBagType("shiny gold");
         Set<BagType> bagTypes = bag.getAllSurroundingBagTypes(new HashSet<>());
