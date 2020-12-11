@@ -11,9 +11,9 @@ public class Part1 {
      */
     public static void main(String[] args) throws Exception {
 
-        List<String> content = FileHelpers.getLines("day08/input.txt");
+        List<String> lines = FileHelpers.getLines("day08/input.txt");
 
-        GameConsole console = new GameConsole(content);
+        GameConsole console = new GameConsole(lines);
         console.startup();
 
         System.out.printf("The last value of the accumulator was: %s%n", console.getAccumulator());
