@@ -2,7 +2,10 @@ package com.tomkel.advent.advent2020.day10;
 
 import com.tomkel.advent.advent2020.FileHelpers;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -27,17 +30,11 @@ public class Part2 {
 
         // Connect the adapters
         adapters.forEach((index, adapter) -> {
-            if (adapters.containsKey(index + 1)) {
-                Adapter nextLowAdapter = adapters.get(index + 1);
-                adapter.setNextLowAdapter(nextLowAdapter);
-            }
-            if (adapters.containsKey(index + 2)) {
-                Adapter nextMediumAdapter = adapters.get(index + 2);
-                adapter.setNextMediumAdapter(nextMediumAdapter);
-            }
-            if (adapters.containsKey(index + 3)) {
-                Adapter nextHighAdapter = adapters.get(index + 3);
-                adapter.setNextHighAdapter(nextHighAdapter);
+            // An adapter can be connected to another adapter that is 1, 2, or 3 jolts away
+            for (int i = 1; i <= 3; i++) {
+                if (adapters.containsKey(index + i)) {
+                    adapter.getForwardAdapters().add(adapters.get(index + i));
+                }
             }
         });
 
@@ -51,13 +48,13 @@ public class Part2 {
     }
 
     static class Adapter {
-        private Adapter nextLowAdapter;
-        private Adapter nextMediumAdapter;
-        private Adapter nextHighAdapter;
+
+        private final List<Adapter> forwardAdapters;
         private long numCombinations;
 
         public Adapter() {
             this.numCombinations = 0;
+            this.forwardAdapters = new ArrayList<>();
         }
 
         /**
@@ -71,24 +68,15 @@ public class Part2 {
             }
 
             // Add the number of combinations from forward adapters
-            numCombinations =
-                    Optional.ofNullable(nextLowAdapter).map(Adapter::getNumCombinations).orElse(0L)
-                    + Optional.ofNullable(nextMediumAdapter).map(Adapter::getNumCombinations).orElse(0L)
-                    + Optional.ofNullable(nextHighAdapter).map(Adapter::getNumCombinations).orElse(0L);
+            numCombinations = forwardAdapters.stream()
+                    .mapToLong(Adapter::getNumCombinations)
+                    .sum();
 
             return numCombinations;
         }
 
-        public void setNextLowAdapter(Adapter nextLowAdapter) {
-            this.nextLowAdapter = nextLowAdapter;
-        }
-
-        public void setNextMediumAdapter(Adapter nextMediumAdapter) {
-            this.nextMediumAdapter = nextMediumAdapter;
-        }
-
-        public void setNextHighAdapter(Adapter nextHighAdapter) {
-            this.nextHighAdapter = nextHighAdapter;
+        public List<Adapter> getForwardAdapters() {
+            return forwardAdapters;
         }
 
         public void setLast() {
