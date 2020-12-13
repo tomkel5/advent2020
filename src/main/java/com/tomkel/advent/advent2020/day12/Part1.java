@@ -11,11 +11,13 @@ public class Part1 {
      * @see <a href="https://adventofcode.com/2020/day/12">Puzzle 12.1</a>
      */
     public static void main(String[] args) throws Exception {
-
         List<String> lines = FileHelpers.getLines("day12/input.txt");
 
-        Point point = new Point(0, 0);
-        Compass compass = new Compass();
+        Point ship = new Point(0, 0);
+        // Use the waypoint method from part 2 of this puzzle. The waypoint begins facing East, one space away.
+        // In the first half of the puzzle, the ship does not move independently with the waypoint; however, the
+        // forward movement of the ship, and the rotation of the waypoint are done just like the second part.
+        Point waypoint = new Point(1, 0);
 
         lines.forEach(line -> {
             char instruction = line.toUpperCase().charAt(0);
@@ -23,79 +25,52 @@ public class Part1 {
 
             switch (instruction) {
                 case 'N':
-                    point.y += argument;
+                    ship.y += argument;
+                    waypoint.y += argument;
                     break;
                 case 'S':
-                    point.y -= argument;
+                    ship.y -= argument;
+                    waypoint.y -= argument;
                     break;
                 case 'E':
-                    point.x += argument;
+                    ship.x += argument;
+                    waypoint.x += argument;
                     break;
                 case 'W':
-                    point.x -= argument;
+                    ship.x -= argument;
+                    waypoint.x -= argument;
                     break;
                 case 'R':
-                    compass.turn(argument);
+                    while(argument > 0) {
+                        int xDiff = waypoint.x - ship.x;
+                        int yDiff = waypoint.y - ship.y;
+                        waypoint.x = ship.x + yDiff;
+                        waypoint.y = ship.y - xDiff;
+                        argument -= 90;
+                    }
                     break;
                 case 'L':
-                    compass.turn(360 - argument);
+                    while (argument > 0) {
+                        int xDiff = waypoint.x - ship.x;
+                        int yDiff = waypoint.y - ship.y;
+                        waypoint.x = ship.x - yDiff;
+                        waypoint.y = ship.y + xDiff;
+                        argument -= 90;
+                    }
                     break;
                 case 'F':
-                    point.x += (compass.direction.vector.x * argument);
-                    point.y += (compass.direction.vector.y * argument);
+                    int xDiff = waypoint.x - ship.x;
+                    int yDiff = waypoint.y - ship.y;
+
+                    ship.x = ship.x + ((waypoint.x - ship.x) * argument);
+                    ship.y = ship.y + ((waypoint.y - ship.y) * argument);
+                    waypoint.x = ship.x + xDiff;
+                    waypoint.y = ship.y + yDiff;
                     break;
             }
         });
 
-        int manhattanDistance = Math.abs(point.x) + Math.abs(point.y);
-        System.out.printf("Ship is at (%s, %s). The Manhattan distance is %s.%n", point.x, point.y, manhattanDistance);
-    }
-
-    static class Compass {
-
-        private Direction direction;
-
-        public Compass() {
-            Direction east = new Direction(new Point(1, 0));
-            Direction south = new Direction(new Point(0, -1));
-            Direction west = new Direction(new Point(-1, 0));
-            Direction north = new Direction(new Point(0, 1));
-            east.setNextDirection(south);
-            south.setNextDirection(west);
-            west.setNextDirection(north);
-            north.setNextDirection(east);
-
-            // Start facing East
-            direction = east;
-        }
-
-        public void turn(int degrees) {
-
-            int turns = degrees / 90;
-
-            // Make sure the number of turns is positive
-            turns = turns % 4;
-            if (turns < 0) {
-                turns += 4;
-            }
-
-            while (turns > 0) {
-                direction = direction.nextDirection;
-                turns--;
-            }
-        }
-    }
-
-    static class Direction {
-        private final Point vector;
-        private Direction nextDirection;
-
-        public Direction(Point vector) {
-            this.vector = vector;
-        }
-
-        public void setNextDirection(Direction direction) {
-            this.nextDirection = direction;
-        }
+        int manhattanDistance = Math.abs(ship.x) + Math.abs(ship.y);
+        System.out.printf("Ship is at (%s, %s). The Manhattan distance is %s.%n", ship.x, ship.y, manhattanDistance);
     }
 }
