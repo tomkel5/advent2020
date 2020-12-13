@@ -2,19 +2,20 @@ package com.tomkel.advent.advent2020.day11;
 
 import com.tomkel.advent.advent2020.FileHelpers;
 
-public class Part1 {
+public class Part2 {
 
     /**
-     * @see <a href="https://adventofcode.com/2020/day/11">Puzzle 11.1</a>
+     * @see <a href="https://adventofcode.com/2020/day/11#part2">Puzzle 11.2</a>
      */
     public static void main(String[] args) throws Exception {
 
         String[] lines = FileHelpers.getLines("day11/input.txt").toArray(new String[0]);
-        Room room = new Room(lines, Room.NeighborStrategy.DIRECT_NEIGHBOR, 4);
+        Room room = new Room(lines, Room.NeighborStrategy.LINE_OF_SIGHT, 5);
 
         boolean changed = true;
         int iterations = 0;
         while (changed) {
+
             iterations++;
             changed = room.advance();
         }

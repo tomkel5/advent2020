@@ -1,12 +1,19 @@
 package com.tomkel.advent.advent2020.day11;
 
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 class Room {
 
     private final Space[][] spaces;
+    private final NeighborStrategy strategy;
+    private final int neighborTolerance;
 
-    public Room(String[] lines) {
+    public Room(String[] lines, NeighborStrategy strategy, int neighborTolerance) {
+        this.strategy = strategy;
+        this.neighborTolerance = neighborTolerance;
         spaces = new Space[lines.length][lines[0].length()];
 
         for (int i = 0; i < lines.length; i++) {
@@ -16,6 +23,10 @@ class Room {
                 spaces[i][j] = new Space(type);
             }
         }
+    }
+
+    enum NeighborStrategy {
+        DIRECT_NEIGHBOR, LINE_OF_SIGHT
     }
 
     enum Type {
@@ -81,9 +92,9 @@ class Room {
                 }
 
                 // Rule:
-                // If a seat is occupied (#) and four or more seats adjacent to it are also occupied, the seat
-                // becomes empty.
-                if (space.current.equals(Type.OCCUPIED_SEAT) && getAdjacentOccupants(i, j) >= 4) {
+                // If a seat is occupied (#) and too many seats adjacent to it are also occupied (based on the
+                // tolerance), then the seat becomes empty.
+                if (space.current.equals(Type.OCCUPIED_SEAT) && getAdjacentOccupants(i, j) >= neighborTolerance) {
                     space.next = Type.EMPTY_SEAT;
                 }
             }
@@ -126,10 +137,20 @@ class Room {
         return true;
     }
 
+    public int getAdjacentOccupants(int row, int col) {
+        if (strategy.equals(NeighborStrategy.DIRECT_NEIGHBOR)) {
+            return getAdjacentOccupantsDirectNeighborStrategy(row, col);
+        } else if (strategy.equals(NeighborStrategy.LINE_OF_SIGHT)) {
+            return getAdjacentOccupantsLineOfSightStrategy(row, col);
+        }
+
+        throw new RuntimeException("Not a valid neighbor strategy");
+    }
+
     /**
      * Get the number of directly adjacent occupants (horizontally, vertically, and diagonally).
      */
-    private int getAdjacentOccupants(int row, int col) {
+    private int getAdjacentOccupantsDirectNeighborStrategy(int row, int col) {
         int count = 0;
         for (int i = row - 1; i <= row + 1; i++) {
             for (int j = col - 1; j <= col + 1; j++) {
@@ -144,6 +165,51 @@ class Room {
                 }
                 if (spaces[i][j].current.equals(Type.OCCUPIED_SEAT)) {
                     count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    /**
+     * Get the number of seats in the line of sight that are occupied (only the first chair seen counts).
+     */
+    private int getAdjacentOccupantsLineOfSightStrategy(int row, int col) {
+
+        // Treat these as vectors that go in every direction. To determine adjacent seats, we'll start in our own
+        // seat, and then move along these vectors until we find a seat, empty or not.
+        List<Point> directions = new ArrayList<Point>() {{
+            add(new Point(-1, -1));
+            add(new Point(-1, 0));
+            add(new Point(-1, 1));
+            add(new Point(0, -1));
+            add(new Point(0, 1));
+            add(new Point(1, -1));
+            add(new Point(1, 0));
+            add(new Point(1, 1));
+        }};
+
+        int count = 0;
+
+        for (Point direction : directions) {
+
+            int x = row;
+            int y = col;
+
+            while (true) {
+                x += direction.x;
+                y += direction.y;
+
+                if (!(x >= 0 && x < spaces.length && y >= 0 && y < spaces[0].length)) {
+                    break;
+                }
+
+                if (spaces[x][y].current.equals(Type.OCCUPIED_SEAT)) {
+                    count++;
+                    break;
+                } else if (spaces[x][y].current.equals(Type.EMPTY_SEAT)) {
+                    break;
                 }
             }
         }
