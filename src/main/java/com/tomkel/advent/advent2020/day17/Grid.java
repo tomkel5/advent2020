@@ -4,14 +4,14 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class Grid {
-    Map<Coordinate, Cube> cubes = new HashMap<>();
+public class Grid<T extends Cube> {
+    Map<Coordinate, T> cubes = new HashMap<>();
 
     public Grid(String grid) {
         String[] rows = grid.split("\n");
         for (int x = 0; x < rows.length; x ++) {
             for (int y = 0; y < rows[x].length(); y ++) {
-                Cube cube = findOrCreateCube(x, y, 0);
+                T cube = findOrCreateCube(x, y, 0);
                 if (rows[x].charAt(y) == '#') {
                     cube.setActive(true);
                 }
@@ -22,8 +22,8 @@ public class Grid {
     /**
      * Find the cube with the lowest coordinate, based on the function provided.
      */
-    public int getLowest(Function<Cube, Integer> f) {
-        return this.cubes.values().stream().filter(Cube::isActive)
+    public int getLowest(Function<T, Integer> f) {
+        return this.cubes.values().stream().filter(T::isActive)
                 .map(f)
                 .mapToInt(i -> i)
                 .min().orElse(0);
@@ -32,8 +32,8 @@ public class Grid {
     /**
      * Find the cube with the highest coordinate, based on the function provided.
      */
-    public int getHighest(Function<Cube, Integer> f) {
-        return this.cubes.values().stream().filter(Cube::isActive)
+    public int getHighest(Function<T, Integer> f) {
+        return this.cubes.values().stream().filter(T::isActive)
                 .map(f)
                 .mapToInt(i -> i)
                 .max().orElse(0);
@@ -76,14 +76,14 @@ public class Grid {
      * Given the coordinates (x, y, z), find a cube in the list that has those coordinates. If one does not
      * exist, then create and add it.
      */
-    public Cube findOrCreateCube(int x, int y, int z) {
+    public T findOrCreateCube(int x, int y, int z) {
 
         Coordinate coordinate = new Coordinate(x, y, z);
         if (cubes.containsKey(coordinate)) {
             return cubes.get(coordinate);
         }
 
-        Cube cube = new Cube(x, y, z);
+        T cube = (T) new Cube(coordinate);
         cubes.put(coordinate, cube);
 
         return cube;

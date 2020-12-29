@@ -1,12 +1,12 @@
 package com.tomkel.advent.advent2020.day17;
 
 public class Cube {
-    private final Coordinate coordinate;
+    protected final Coordinate coordinate;
     public boolean active;
     public boolean activeNextGen;
 
-    public Cube(int x, int y, int z) {
-        this.coordinate = new Coordinate(x, y, z);
+    public Cube(Coordinate coordinate) {
+        this.coordinate = coordinate;
         active = false;
         activeNextGen = false;
     }
