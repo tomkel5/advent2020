@@ -1,0 +1,17 @@
+#### 2020
+
+* Day 1: [Report Repair](src/main/resources/day01/PUZZLE.md)
+* Day 2: [Password Philosophy](src/main/resources/day02/PUZZLE.md)
+* Day 3: [Toboggan Trajectory](src/main/resources/day03/PUZZLE.md)
+* Day 4: [Passport Processing](src/main/resources/day04/PUZZLE.md)
+* Day 5: [Binary Boarding](src/main/resources/day05/PUZZLE.md)
+* Day 6: [Custom Customs](src/main/resources/day06/PUZZLE.md)
+* Day 7: [Handy Haversacks](src/main/resources/day07/PUZZLE.md)
+* Day 8: [Handheld Halting](src/main/resources/day08/PUZZLE.md)
+* Day 9: [Encoding Error](src/main/resources/day09/PUZZLE.md)
+* Day 10: [Adapter Array](src/main/resources/day10/PUZZLE.md)
+* Day 11: [Seating System](src/main/resources/day11/PUZZLE.md)
+* Day 12: [Rain Risk](src/main/resources/day12/PUZZLE.md)
+* Day 13: [Shuttle Search](src/main/resources/day13/PUZZLE.md)
+* Day 14: [Docking Data](src/main/resources/day14/PUZZLE.md)
+* Day 15: [Rambunctious Recitation](src/main/resources/day15/PUZZLE.md)
