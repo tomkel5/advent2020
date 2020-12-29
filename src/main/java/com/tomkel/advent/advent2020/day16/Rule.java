@@ -5,10 +5,13 @@ import java.util.List;
 
 public class Rule {
 
+    private final String name;
     private final List<Range> ranges;
 
     public Rule(String line) {
         String[] keyValueParts = line.split(": ");
+        this.name = keyValueParts[0];
+
         this.ranges = new ArrayList<>();
 
         String[] rangeParts = keyValueParts[1].split(" or ");
@@ -21,11 +24,11 @@ public class Rule {
         }
     }
 
-    public List<Range> getRanges() {
-        return ranges;
-    }
-
     public boolean test(int number) {
         return this.ranges.stream().anyMatch(i -> i.test(number));
+    }
+
+    public String getName() {
+        return name;
     }
 }
