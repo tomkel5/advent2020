@@ -16,3 +16,4 @@
 * Day 14: [Docking Data](src/main/resources/day14/PUZZLE.md)
 * Day 15: [Rambunctious Recitation](src/main/resources/day15/PUZZLE.md)
 * Day 16: [Ticket Translation](src/main/resources/day16/PUZZLE.md)
+* Day 17: [Conway Cubes](src/main/resources/day17/PUZZLE.md)
