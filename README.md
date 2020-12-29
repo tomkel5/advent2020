@@ -15,3 +15,4 @@
 * Day 13: [Shuttle Search](src/main/resources/day13/PUZZLE.md)
 * Day 14: [Docking Data](src/main/resources/day14/PUZZLE.md)
 * Day 15: [Rambunctious Recitation](src/main/resources/day15/PUZZLE.md)
+* Day 16: [Ticket Translation](src/main/resources/day16/PUZZLE.md)
